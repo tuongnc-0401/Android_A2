@@ -1,6 +1,12 @@
 package rmit.tuong.s3818196;
 
-public class SiteModel {
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.ClusterItem;
+
+public class SiteModel implements ClusterItem {
     private int id;
     private String name;
     private double longitude;
@@ -123,4 +129,33 @@ public class SiteModel {
                 ", numOfPeopleTested=" + numOfPeopleTested +
                 '}';
     }
+
+    @NonNull
+    @Override
+    public LatLng getPosition() {
+        LatLng latLng = new LatLng(latitude,longitude);
+        return latLng;
+    }
+
+    @Nullable
+    @Override
+    public String getTitle() {
+        return this.name;
+    }
+
+    @Nullable
+    @Override
+    public String getSnippet() {
+        return "SiteModel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
+                ", leaderID=" + leaderID +
+                ", leaderName='" + leaderName + '\'' +
+                ", numOfPeopleTested=" + numOfPeopleTested +
+                '}';
+    }
+
+
 }

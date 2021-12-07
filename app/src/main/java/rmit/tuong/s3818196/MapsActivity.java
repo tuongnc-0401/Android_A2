@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -38,6 +39,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 
 import java.util.ArrayList;
@@ -54,10 +56,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ActivityMapsBinding binding;
     protected FusedLocationProviderClient client;
     protected LocationRequest mLocationRequest;
-    private ImageView ic_gps;
+    private ImageView ic_gps, ic_join;
     private Button btnLogin;
     private List<SiteModel> listSites;
-    private DatabaseHelper databaseHelper = new DatabaseHelper(MapsActivity.this);;
+    private DatabaseHelper databaseHelper = new DatabaseHelper(MapsActivity.this);
     private SharedPreferences sharedPreferences;
     private  String username;
     @Override
@@ -72,6 +74,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         ic_gps = findViewById(R.id.ic_gps);
+        ic_join = findViewById(R.id.ic_login);
         btnLogin = findViewById(R.id.btnLogInMap);
         sharedPreferences = getSharedPreferences("userLogin", MODE_PRIVATE);
         username = sharedPreferences.getString("username", "");
@@ -99,6 +102,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 getPosition(view);
             }
         });
+
+
+        ic_join.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               int siteID = sharedPreferences.getInt("siteId", -1);
+               int userID = sharedPreferences.getInt("userID", -1);
+
+                if (!username.isEmpty()){
+                    Intent intent1 = new Intent(MapsActivity.this, SiteDetailActivity.class);
+                   intent1.putExtra("siteID", siteID);
+                     intent1.putExtra("userID", userID);
+                    startActivity(intent1);
+
+
+                } else {
+                    Toast.makeText(MapsActivity.this, "Please log in to join this site", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+        });
+
+
     }
 
     /**
@@ -244,7 +271,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     // Declare a variable for the cluster manager.
-    private ClusterManager<MyItem> clusterManager;
+    private ClusterManager<SiteModel> clusterManager;
 
     private void setUpClusterer() {
         // Position the map.
@@ -252,12 +279,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Initialize the manager with the context and the map.
         // (Activity extends context, so we can pass 'this' in the constructor.)
-        clusterManager = new ClusterManager<MyItem>(MapsActivity.this, mMap);
+        clusterManager = new ClusterManager<SiteModel>(MapsActivity.this, mMap);
 
         // Point the map's listeners at the listeners implemented by the cluster
         // manager.
         mMap.setOnCameraIdleListener(clusterManager);
-        mMap.setOnMarkerClickListener(clusterManager);
+       mMap.setOnMarkerClickListener(clusterManager);
+
+
+
+
+
+        clusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<SiteModel>() {
+            @Override
+            public boolean onClusterItemClick(SiteModel item) {
+                ic_join.setVisibility(View.VISIBLE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("siteId", item.getId());
+                editor.commit();
+                return false;
+            }
+        });
+
+
+
+
+        clusterManager.getMarkerCollection()
+                .setInfoWindowAdapter(new CustomInfoViewAdapter(LayoutInflater.from(this), MapsActivity.this));
+
+        mMap.setInfoWindowAdapter(clusterManager.getMarkerManager());
         final CustomClusterRenderer renderer = new CustomClusterRenderer(MapsActivity.this, mMap, clusterManager);
         clusterManager.setRenderer(renderer);
         // Add cluster items (markers) to the cluster manager.
@@ -274,8 +324,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if(i == listSites.size()-1){
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position,15));
             }
-            MyItem offsetItem = new MyItem(site.getLatitude(), site.getLongitude(), site.getName(),site.getName());
-            clusterManager.addItem(offsetItem);
+            String snippets = "Leader: "+ site.getLeaderName()+"\nNumber of volunteer: "+site.getNumOfVolunteer()
+                    +"\nNumber of Tested People: "+site.getNumOfPeopleTested();
+
+            //MyItem offsetItem = new MyItem(site.getLatitude(), site.getLongitude(), site.getName(),snippets);
+            clusterManager.addItem(site);
         }
 
 

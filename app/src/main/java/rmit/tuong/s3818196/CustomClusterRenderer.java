@@ -15,20 +15,21 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
-public class CustomClusterRenderer extends DefaultClusterRenderer<MyItem> {
+public class CustomClusterRenderer extends DefaultClusterRenderer<SiteModel> {
 
     private final Context mContext;
 
 
 
     @Override
-    protected void onBeforeClusterItemRendered(@NonNull MyItem item, @NonNull MarkerOptions markerOptions) {
+    protected void onBeforeClusterItemRendered(@NonNull SiteModel item, @NonNull MarkerOptions markerOptions) {
         super.onBeforeClusterItemRendered(item, markerOptions);
-        markerOptions.icon(bitmapDescriptorFromVector(mContext,R.drawable.ic_site));
+        markerOptions.icon(bitmapDescriptorFromVector(mContext,R.drawable.ic_site))
+        .snippet(String.valueOf(item.getId()));
 
     }
 
-    public CustomClusterRenderer(Context context, GoogleMap map, ClusterManager<MyItem> clusterManager) {
+    public CustomClusterRenderer(Context context, GoogleMap map, ClusterManager<SiteModel> clusterManager) {
         super(context, map, clusterManager);
         this.mContext = context;
     }

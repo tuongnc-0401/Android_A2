@@ -124,6 +124,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return  returnedList;
     }
 
+    public SiteModel getSiteByID(int idSite){
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from "+SITE_TABLE+" where "+COLUMN_SITE_ID+" = "+idSite,null);
+
+        if(cursor.getCount()>0) {
+            cursor.moveToFirst();
+            int siteID = cursor.getInt(0);
+            String siteName = cursor.getString(1);
+            double siteLongitude = cursor.getDouble(2);
+            double siteLatitude = cursor.getDouble(3);
+            String siteLeaderName = cursor.getString(4);
+            int siteLeaderID = cursor.getInt(5);
+            int siteNumOfPeopleID = cursor.getInt(6);
+            String siteListVolunteer = cursor.getString(7);
+            int siteNumOfVolunteer = cursor.getInt(8);
+            SiteModel site = new SiteModel(siteID,siteName,siteLongitude,siteLatitude,siteLeaderID,siteLeaderName,siteNumOfPeopleID,siteListVolunteer,siteNumOfVolunteer);
+
+            return  site;
+        } else {
+            return null;
+        }
+
+    }
+
+
     public Boolean createUser(String username, String password, String role){
         SQLiteDatabase MyDB = this.getWritableDatabase();
         ContentValues contentValues= new ContentValues();
@@ -159,6 +184,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
     }
+
+
+    public UserModel getUserByID(String idUser){
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from "+USER_TABLE+" where "+COLUMN_USER_ID+" = ?", new String[] {idUser});
+        UserModel user;
+        if(cursor.getCount()>0) {
+            cursor.moveToFirst();
+            int id = cursor.getInt(0);
+            String username1 = cursor.getString(1);
+            String role = cursor.getString(3);
+            user= new UserModel(id,username1, role);
+            return  user;
+        } else {
+            return null;
+        }
+
+    }
+
 
 
     public Boolean checkUsernamePassword(String username, String password){

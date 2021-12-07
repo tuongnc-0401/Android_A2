@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/drawable-hdpi/white_border.xml" value="0.23958333333333334" />
         <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.10462962962962963" />
+        <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/drawable/ic_join.xml" value="0.14635416666666667" />
         <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2703125" />
         <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/drawable/ic_site.xml" value="0.14635416666666667" />
         <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/layout/activity_add_new_site.xml" value="0.25416666666666665" />
@@ -11,6 +13,8 @@
         <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/layout/activity_maps.xml" value="0.25416666666666665" />
         <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/layout/activity_profile.xml" value="0.25416666666666665" />
         <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/layout/activity_sign_up.xml" value="0.25416666666666665" />
+        <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/layout/activity_site_detail.xml" value="0.264" />
+        <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/layout/custom_window_info.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>

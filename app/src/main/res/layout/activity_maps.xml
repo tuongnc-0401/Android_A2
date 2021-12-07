@@ -14,16 +14,24 @@ tools:context=".MapsActivity">
     />
 
 
+    <ImageView
+        android:id="@+id/ic_gps"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/ic_gps"></ImageView>
 
-<ImageView
-    android:layout_width="30dp"
-    android:layout_height="30dp"
-    android:src="@drawable/ic_gps"
-    android:layout_marginTop="20dp"
-    android:layout_marginRight="20dp"
-    android:layout_alignParentRight="true"
-    android:id="@+id/ic_gps"></ImageView>
-
+    <ImageView
+        android:id="@+id/ic_login"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="55dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/ic_join"
+        android:visibility="invisible"></ImageView>
     <Button
         android:id="@+id/btnLogInMap"
         android:layout_width="wrap_content"
