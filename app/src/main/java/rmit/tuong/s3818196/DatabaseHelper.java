@@ -25,6 +25,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_SITE_NUM_PEOPLE_TESTED = "SITE_NUM_PEOPLE_TESTED";
     public static final String COLUMN_SITE_LIST_VOLUNTEER = "COLUMN_SITE_LIST_VOLUNTEER";
     public static final String COLUMN_SITE_NUM_OF_VOLUNTEER = "COLUMN_SITE_NUM_OF_VOLUNTEER";
+    public static final String COLUMN_SITE_NUM_OF_POSITIVE = "COLUMN_SITE_NUM_OF_POSITIVE";
+    public static final String COLUMN_SITE_NUM_OF_NEGATIVE = "COLUMN_SITE_NUM_OF_NEGATIVE";
     private static final String TAG = "DatabaseHelper";
     // constant for USER TABLE
     public static final String USER_TABLE = "USER_TABLE";
@@ -49,7 +51,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_SITE_LEADER_ID + " INT, "
                 + COLUMN_SITE_NUM_PEOPLE_TESTED + " INT, "
                 + COLUMN_SITE_LIST_VOLUNTEER + " TEXT, "
-                + COLUMN_SITE_NUM_OF_VOLUNTEER + " INT)";
+                + COLUMN_SITE_NUM_OF_VOLUNTEER + " INT, "
+                + COLUMN_SITE_NUM_OF_POSITIVE + " INT, "
+                + COLUMN_SITE_NUM_OF_NEGATIVE + " INT)";
                sqLiteDatabase.execSQL(createSiteTableStatement);
 
         String createUserTableStatement = "CREATE TABLE " + USER_TABLE+
@@ -79,6 +83,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_SITE_NUM_PEOPLE_TESTED, siteModel.getNumOfPeopleTested());
         cv.put(COLUMN_SITE_LIST_VOLUNTEER, siteModel.getListVolunteer());
         cv.put(COLUMN_SITE_NUM_OF_VOLUNTEER, siteModel.getNumOfVolunteer());
+        cv.put(COLUMN_SITE_NUM_OF_POSITIVE, siteModel.getNumOfPositive());
+        cv.put(COLUMN_SITE_NUM_OF_NEGATIVE, siteModel.getNumOfNegative());
         Log.d(TAG, "addOneSite: "+cv.toString());
         long insert = db.insert(SITE_TABLE,null, cv);
         return insert != -1;
@@ -111,7 +117,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 int siteNumOfPeopleID = cursor.getInt(6);
                 String siteListVolunteer = cursor.getString(7);
                 int siteNumOfVolunteer = cursor.getInt(8);
-                SiteModel site = new SiteModel(siteID,siteName,siteLongitude,siteLatitude,siteLeaderID,siteLeaderName,siteNumOfPeopleID,siteListVolunteer,siteNumOfVolunteer);
+                int siteNumOfPositive = cursor.getInt(9);
+                int siteNumOfNegative = cursor.getInt(10);
+                SiteModel site = new SiteModel(siteID,siteName,siteLongitude,siteLatitude,siteLeaderID,siteLeaderName,siteNumOfPeopleID,siteListVolunteer,siteNumOfVolunteer,siteNumOfPositive,siteNumOfNegative);
 
                 returnedList.add(site);
 
@@ -139,7 +147,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             int siteNumOfPeopleID = cursor.getInt(6);
             String siteListVolunteer = cursor.getString(7);
             int siteNumOfVolunteer = cursor.getInt(8);
-            SiteModel site = new SiteModel(siteID,siteName,siteLongitude,siteLatitude,siteLeaderID,siteLeaderName,siteNumOfPeopleID,siteListVolunteer,siteNumOfVolunteer);
+            int siteNumOfPositive = cursor.getInt(9);
+            int siteNumOfNegative = cursor.getInt(10);
+            SiteModel site = new SiteModel(siteID,siteName,siteLongitude,siteLatitude,siteLeaderID,siteLeaderName,siteNumOfPeopleID,siteListVolunteer,siteNumOfVolunteer,siteNumOfPositive,siteNumOfNegative);
 
             return  site;
         } else {

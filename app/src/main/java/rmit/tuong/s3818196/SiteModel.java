@@ -14,11 +14,27 @@ public class SiteModel implements ClusterItem {
     private int leaderID;
     private String leaderName;
     private int numOfPeopleTested;
+    private int numOfPositive;
+    private int numOfNegative;
     private String listVolunteer;
     private int numOfVolunteer;
 
     // Constructor
     public SiteModel() {
+    }
+
+    public SiteModel(int id, String name, double longitude, double latitude, int leaderID, String leaderName, int numOfPeopleTested, String listVolunteer, int numOfVolunteer, int numOfPositive, int numOfNegative) {
+        this.id = id;
+        this.name = name;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.leaderID = leaderID;
+        this.leaderName = leaderName;
+        this.numOfPeopleTested = numOfPeopleTested;
+        this.numOfPositive = numOfPositive;
+        this.numOfNegative = numOfNegative;
+        this.listVolunteer = listVolunteer;
+        this.numOfVolunteer = numOfVolunteer;
     }
 
     public SiteModel(int id, String name, double longitude, double latitude, int leaderID, String leaderName, int numOfPeopleTested, String listVolunteer, int numOfVolunteer) {
@@ -44,6 +60,23 @@ public class SiteModel implements ClusterItem {
     }
 
     // Getter and Setter for all attribute
+
+
+    public int getNumOfPositive() {
+        return numOfPositive;
+    }
+
+    public void setNumOfPositive(int numOfPositive) {
+        this.numOfPositive = numOfPositive;
+    }
+
+    public int getNumOfNegative() {
+        return numOfNegative;
+    }
+
+    public void setNumOfNegative(int numOfNegative) {
+        this.numOfNegative = numOfNegative;
+    }
 
     public int getId() {
         return id;
@@ -127,6 +160,10 @@ public class SiteModel implements ClusterItem {
                 ", leaderID=" + leaderID +
                 ", leaderName='" + leaderName + '\'' +
                 ", numOfPeopleTested=" + numOfPeopleTested +
+                ", numOfPositive=" + numOfPositive +
+                ", numOfNegative=" + numOfNegative +
+                ", listVolunteer='" + listVolunteer + '\'' +
+                ", numOfVolunteer=" + numOfVolunteer +
                 '}';
     }
 

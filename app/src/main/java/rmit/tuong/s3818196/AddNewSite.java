@@ -38,7 +38,7 @@ public class AddNewSite extends AppCompatActivity {
             public void onClick(View view) {
 
                 try {
-                    site = new SiteModel(-1,edtName.getText().toString(),longitude,latitude,userID,username, 1,"",0);
+                    site = new SiteModel(-1,edtName.getText().toString(),longitude,latitude,userID,username, 0,"",0,0,0);
 
                 }catch (Exception e){
 
