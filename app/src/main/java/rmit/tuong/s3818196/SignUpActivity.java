@@ -40,12 +40,13 @@ public class SignUpActivity extends AppCompatActivity {
                         Boolean checkUser = databaseHelper.checkUsername(user);
                         Log.d(TAG, "onClick: pass equal pass");
                         if(checkUser==false){
-                            Boolean insert = databaseHelper.createUser(user, pass, "leader");
+                            Boolean insert = databaseHelper.createUser(user, pass, "user");
                             if(insert==true){
                                 UserModel userModel = databaseHelper.getUser(user,pass);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putInt("userID", userModel.getId());
                                 editor.putString("username", userModel.getUsername());
+                                editor.putString("role", "user");
                                 editor.commit();
                                 Toast.makeText(SignUpActivity.this, "Registered successfully", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(getApplicationContext(),MapsActivity.class);

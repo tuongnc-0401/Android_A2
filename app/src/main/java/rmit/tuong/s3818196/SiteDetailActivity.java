@@ -123,12 +123,37 @@ public class SiteDetailActivity extends AppCompatActivity {
         btnQuitSite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Boolean check = databaseHelper.deleteOneMembership(userID+"", siteID+"");
-                if(check){
-                    Toast.makeText(SiteDetailActivity.this, "delete 1", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(SiteDetailActivity.this, "delete 0", Toast.LENGTH_SHORT).show();
-                }
+
+
+                AlertDialog dlg = new AlertDialog.Builder(SiteDetailActivity.this)
+                        .setTitle("Notification")
+                        .setMessage("Are you sure to quit this site?")
+                        .setPositiveButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        })
+                        .setNegativeButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Boolean check = databaseHelper.deleteOneMembership(userID+"", siteID+"");
+                                    Toast.makeText(SiteDetailActivity.this, "You quit this site successfully!", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                    startActivity(getIntent());
+
+
+                            }
+                        })
+                        .create();
+                dlg.show();
+
+
+
+
+
+
+
             }
         });
 

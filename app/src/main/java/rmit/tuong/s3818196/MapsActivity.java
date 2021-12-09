@@ -126,6 +126,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
 
+        boolean havingAdmin = databaseHelper.checkUsername("Admin");
+        if(!havingAdmin){
+            databaseHelper.createUser("admin", "admin","admin");
+        }
+
     }
 
     /**

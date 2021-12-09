@@ -47,6 +47,7 @@ public class LogInActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putInt("userID", userModel.getId());
                         editor.putString("username", userModel.getUsername());
+                        editor.putString("role", userModel.getRole());
                         editor.commit();
                         Toast.makeText(LogInActivity.this, "LogIn successfully", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
