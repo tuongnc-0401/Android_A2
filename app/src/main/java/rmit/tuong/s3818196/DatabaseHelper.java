@@ -35,6 +35,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_USER_PASSWORD = "COLUMN_USER_PASSWORD";
     public static final String COLUMN_USER_ROLE = "COLUMN_USER_ROLE";
 
+    // constant for MEMBERSHIP SITE
+    public static final String MEMBERSHIP_TABLE = "MEMBERSHIP_TABLE";
+    public static final String COLUMN_MEMBERSHIP_ID = "COLUMN_MEMBERSHIP_ID";
+    public static final String COLUMN_MEMBERSHIP_USER_ID = "COLUMN_MEMBERSHIP_USER_ID";
+    public static final String COLUMN_MEMBERSHIP_USERNAME = "COLUMN_MEMBERSHIP_USERNAME";
+    public static final String COLUMN_MEMBERSHIP_SITE_ID = "COLUMN_MEMBERSHIP_SITE_ID";
+
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, "s3818196.db", null, 1);
@@ -62,6 +69,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                        + COLUMN_USER_PASSWORD + " TEXT, "
                        + COLUMN_USER_ROLE + " TEXT)";
         sqLiteDatabase.execSQL(createUserTableStatement);
+        String createMembershipTableStatement = "CREATE TABLE " + MEMBERSHIP_TABLE+
+                " (" + COLUMN_MEMBERSHIP_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_MEMBERSHIP_USER_ID + " INT, "
+                + COLUMN_MEMBERSHIP_USERNAME + " TEXT, "
+                + COLUMN_MEMBERSHIP_SITE_ID + " INT)";
+        sqLiteDatabase.execSQL(createMembershipTableStatement);
     }
 
     @Override
@@ -71,6 +84,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //        onCreate(sqLiteDatabase);
     }
 
+    /**
+     *
+     * SITE TABLES
+     */
     public boolean addOneSite(SiteModel siteModel){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -158,6 +175,66 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+
+    /**
+     * MEMBERSHIP TABLE
+     */
+    public Boolean createMembership(int userID, String username, int siteID){
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        ContentValues contentValues= new ContentValues();
+        contentValues.put(COLUMN_MEMBERSHIP_USER_ID, userID);
+        contentValues.put(COLUMN_MEMBERSHIP_USERNAME, username);
+        contentValues.put(COLUMN_MEMBERSHIP_SITE_ID, siteID);
+        long result = MyDB.insert(MEMBERSHIP_TABLE, null, contentValues);
+        return result != -1;
+    }
+
+    public Boolean checkMembership(String userID, String username, String siteID) {
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from "+MEMBERSHIP_TABLE +" where "+COLUMN_MEMBERSHIP_USER_ID+" = ? and "+COLUMN_MEMBERSHIP_USERNAME+" = ? and "+ COLUMN_MEMBERSHIP_SITE_ID+" = ?", new String[]{ userID, username, siteID});
+        if (cursor.getCount() > 0)
+            return true;
+        else
+            return false;
+    }
+
+    public Boolean checkMembershipByUserID(String userID, String siteID) {
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from "+MEMBERSHIP_TABLE +" where "+COLUMN_MEMBERSHIP_USER_ID+" = ? and "+ COLUMN_MEMBERSHIP_SITE_ID+" = ?", new String[]{ userID, siteID});
+        if (cursor.getCount() > 0)
+            return true;
+        else
+            return false;
+    }
+
+    public int getNumOfVolunteer(String siteID){
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from "+MEMBERSHIP_TABLE +" where "+ COLUMN_MEMBERSHIP_SITE_ID+" = ?", new String[]{siteID});
+        int count = cursor.getCount() ;
+        return count;
+    }
+
+
+        public boolean deleteOneMembership (String userID, String siteID){
+//            SQLiteDatabase MyDB = this.getWritableDatabase();
+//            Cursor cursor = MyDB.rawQuery("DELETE from "+MEMBERSHIP_TABLE +" where "+COLUMN_MEMBERSHIP_USER_ID+" = ? and "+ COLUMN_MEMBERSHIP_SITE_ID+" = ?", new String[]{ userID, siteID});
+
+            SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM "+ MEMBERSHIP_TABLE+" WHERE "+ COLUMN_MEMBERSHIP_USER_ID+ " = "+userID + " and "+COLUMN_MEMBERSHIP_SITE_ID+" = "+ siteID ;
+       Cursor cursor = db.rawQuery(query, null);
+
+            if(cursor.moveToFirst()){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+
+    /**
+     *USER TABLE
+     */
 
     public Boolean createUser(String username, String password, String role){
         SQLiteDatabase MyDB = this.getWritableDatabase();

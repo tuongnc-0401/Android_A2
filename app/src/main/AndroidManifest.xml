@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.S3818196">
         <activity
+            android:name=".JoinSiteActivity"
+            android:exported="false" />
+        <activity
             android:name=".SiteDetailActivity"
             android:exported="false" />
         <activity

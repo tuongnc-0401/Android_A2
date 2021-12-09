@@ -36,7 +36,8 @@ public class CustomInfoViewAdapter implements GoogleMap.InfoWindowAdapter{
 
         String id = marker.getSnippet();
         SiteModel site = databaseHelper.getSiteByID(Integer.parseInt(id));
-        String snippets = "Leader: "+ site.getLeaderName()+"\nNumber of volunteer: "+site.getNumOfVolunteer();
+        int count = databaseHelper.getNumOfVolunteer(id);
+        String snippets = "Leader: "+ site.getLeaderName()+"\nNumber of volunteer: "+count;
         ((TextView) popup.findViewById(R.id.snippet)).setText(snippets);
 
 

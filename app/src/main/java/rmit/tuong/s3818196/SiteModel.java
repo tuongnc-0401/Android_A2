@@ -183,15 +183,7 @@ public class SiteModel implements ClusterItem {
     @Nullable
     @Override
     public String getSnippet() {
-        return "SiteModel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", longitude=" + longitude +
-                ", latitude=" + latitude +
-                ", leaderID=" + leaderID +
-                ", leaderName='" + leaderName + '\'' +
-                ", numOfPeopleTested=" + numOfPeopleTested +
-                '}';
+        return null;
     }
 
 
