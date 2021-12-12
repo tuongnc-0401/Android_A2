@@ -40,10 +40,6 @@ public class UserModel {
 
     @Override
     public String toString() {
-        return "UserModel{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", role='" + role + '\'' +
-                '}';
+        return username;
     }
 }

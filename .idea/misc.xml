@@ -10,12 +10,14 @@
         <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/drawable/ic_site.xml" value="0.14635416666666667" />
         <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/layout/activity_add_new_site.xml" value="0.25416666666666665" />
         <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/layout/activity_join_site.xml" value="0.25416666666666665" />
+        <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/layout/activity_list_all_volunteer.xml" value="0.25416666666666665" />
         <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/layout/activity_log_in.xml" value="0.13020833333333334" />
         <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/layout/activity_maps.xml" value="0.25416666666666665" />
         <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/layout/activity_profile.xml" value="0.25416666666666665" />
         <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/layout/activity_sign_up.xml" value="0.25416666666666665" />
         <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/layout/activity_site_detail.xml" value="0.264" />
         <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/layout/custom_window_info.xml" value="0.25416666666666665" />
+        <entry key="..\:/RMIT/Android/A2_s3818196/app/src/main/res/layout/item_design.xml" value="0.25052083333333336" />
       </map>
     </option>
   </component>

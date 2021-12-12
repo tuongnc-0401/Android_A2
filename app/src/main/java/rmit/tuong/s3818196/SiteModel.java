@@ -152,19 +152,7 @@ public class SiteModel implements ClusterItem {
 
     @Override
     public String toString() {
-        return "SiteModel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", longitude=" + longitude +
-                ", latitude=" + latitude +
-                ", leaderID=" + leaderID +
-                ", leaderName='" + leaderName + '\'' +
-                ", numOfPeopleTested=" + numOfPeopleTested +
-                ", numOfPositive=" + numOfPositive +
-                ", numOfNegative=" + numOfNegative +
-                ", listVolunteer='" + listVolunteer + '\'' +
-                ", numOfVolunteer=" + numOfVolunteer +
-                '}';
+        return "Site: "+name;
     }
 
     @NonNull

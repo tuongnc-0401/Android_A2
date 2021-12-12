@@ -149,6 +149,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return  returnedList;
     }
 
+    public int getNumOfAllSite() {
+
+        String queryString = "SELECT * FROM "+ SITE_TABLE;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(queryString, null);
+        int num = cursor.getCount();
+        cursor.close();
+        db.close();
+        return  num;
+    }
     public SiteModel getSiteByID(int idSite){
         SQLiteDatabase MyDB = this.getWritableDatabase();
         Cursor cursor = MyDB.rawQuery("Select * from "+SITE_TABLE+" where "+COLUMN_SITE_ID+" = "+idSite,null);
@@ -213,6 +223,105 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int count = cursor.getCount() ;
         return count;
     }
+
+    public int getNumOfSiteByUserID(String userID){
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from "+MEMBERSHIP_TABLE +" where "+ COLUMN_MEMBERSHIP_USER_ID +" = ?", new String[]{userID});
+        int count = cursor.getCount() ;
+        return count;
+    }
+
+    public int getNumOfSiteByLeader(String userID){
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from "+SITE_TABLE +" where "+ COLUMN_SITE_LEADER_ID +" = ?", new String[]{userID});
+        int count = cursor.getCount() ;
+        return count;
+    }
+
+    // list all site which this user are volunteer
+    public List<String> getAllSiteOfVolunteer(String userID){
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from "+MEMBERSHIP_TABLE +" where "+ COLUMN_MEMBERSHIP_USER_ID +" = ?", new String[]{userID});
+        List<String> list = new ArrayList<>();
+        if(cursor.moveToFirst()){
+            do {
+                int ID = cursor.getInt(0);
+                int userID1 = cursor.getInt(1);
+                String username = cursor.getString(2);
+                int idOfSite = cursor.getInt(3);
+
+                list.add(idOfSite+"");
+
+
+
+            } while (cursor.moveToNext());
+        }else {
+
+        }
+        cursor.close();
+        MyDB.close();
+        return  list;
+    }
+
+
+    // list all site which this user are leader
+    public List<SiteModel> getAllSiteOfLeader(String userID){
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from "+SITE_TABLE +" where "+ COLUMN_SITE_LEADER_ID +" = ?", new String[]{userID});
+        List<SiteModel> list = new ArrayList<>();
+        if(cursor.moveToFirst()){
+            do {
+                int siteID = cursor.getInt(0);
+                String siteName = cursor.getString(1);
+                double siteLongitude = cursor.getDouble(2);
+                double siteLatitude = cursor.getDouble(3);
+                String siteLeaderName = cursor.getString(4);
+                int siteLeaderID = cursor.getInt(5);
+                int siteNumOfPeopleID = cursor.getInt(6);
+                String siteListVolunteer = cursor.getString(7);
+                int siteNumOfVolunteer = cursor.getInt(8);
+                int siteNumOfPositive = cursor.getInt(9);
+                int siteNumOfNegative = cursor.getInt(10);
+                SiteModel site = new SiteModel(siteID,siteName,siteLongitude,siteLatitude,siteLeaderID,siteLeaderName,siteNumOfPeopleID,siteListVolunteer,siteNumOfVolunteer,siteNumOfPositive,siteNumOfNegative);
+                list.add(site);
+
+
+
+            } while (cursor.moveToNext());
+        }else {
+
+        }
+        cursor.close();
+        MyDB.close();
+        return  list;
+    }
+
+    public List<UserModel> getAllVolunteerOfOneSite(String siteID) {
+        List<UserModel> returnedList = new ArrayList<>();
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from "+MEMBERSHIP_TABLE +" where "+ COLUMN_MEMBERSHIP_SITE_ID+" = ?", new String[]{siteID});
+
+        if(cursor.moveToFirst()){
+            do {
+                int ID = cursor.getInt(0);
+                int userID = cursor.getInt(1);
+                String username = cursor.getString(2);
+                int idOfSite = cursor.getInt(3);
+
+                UserModel userModel = new UserModel(ID,username,userID+"");
+
+                returnedList.add(userModel);
+
+            } while (cursor.moveToNext());
+        }else {
+
+        }
+        cursor.close();
+        MyDB.close();
+        return  returnedList;
+    }
+
+
 
 
         public boolean deleteOneMembership (String userID, String siteID){

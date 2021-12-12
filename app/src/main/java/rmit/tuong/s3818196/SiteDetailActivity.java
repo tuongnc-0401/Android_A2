@@ -16,7 +16,7 @@ public class SiteDetailActivity extends AppCompatActivity {
     TextView txtSiteName, txtWelcome, txtSiteLeader, txtNumOfVolunteer, txtNumOfPeople, txtNoti, txtNumOfPositive, txtNumOfNegative;
     private DatabaseHelper databaseHelper;
     private int userID, siteID;
-    Button btnJoinSite, btnQuitSite, btnRegister;
+    Button btnJoinSite, btnQuitSite, btnRegister, btnViewVolunteer, btnUpdateStatistic;
     ConstraintLayout layoutSatistic, layoutAdmin;
 
     @Override
@@ -157,6 +157,16 @@ public class SiteDetailActivity extends AppCompatActivity {
             }
         });
 
+        // BTN VIEW VOLUNTEER
+        btnViewVolunteer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(SiteDetailActivity.this, ListAllVolunteerActivity.class);
+                i.putExtra("siteID", siteID);
+                startActivity(i);
+            }
+        });
+
     }
 
     private void initial() {
@@ -173,5 +183,7 @@ public class SiteDetailActivity extends AppCompatActivity {
         layoutAdmin = findViewById(R.id.layoutAdmin);
         btnQuitSite = findViewById(R.id.btnQuitSite);
         btnRegister = findViewById(R.id.btnRegisterFriend);
+        btnViewVolunteer = findViewById(R.id.btnViewVolunteer);
+        btnUpdateStatistic = findViewById(R.id.btnUpdateStatistic);
     }
 }

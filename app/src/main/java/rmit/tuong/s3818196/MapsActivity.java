@@ -126,7 +126,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
 
-        boolean havingAdmin = databaseHelper.checkUsername("Admin");
+        boolean havingAdmin = databaseHelper.checkUsername("admin");
+
         if(!havingAdmin){
             databaseHelper.createUser("admin", "admin","admin");
         }
