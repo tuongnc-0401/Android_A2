@@ -52,7 +52,14 @@ public class SiteDetailActivity extends AppCompatActivity {
             txtNoti.setText("You are the leader of this site");
             layoutSatistic.setVisibility(View.VISIBLE);
             layoutAdmin.setVisibility(View.VISIBLE);
-        } else if(isMember){
+        } else if(user.getUsername().equals("admin")) {
+            btnJoinSite.setVisibility(View.INVISIBLE);
+            btnQuitSite.setVisibility(View.INVISIBLE);
+            txtNoti.setVisibility(View.INVISIBLE);
+            layoutSatistic.setVisibility(View.VISIBLE);
+            layoutAdmin.setVisibility(View.VISIBLE);
+            btnRegister.setVisibility(View.INVISIBLE);
+        }else if(isMember){
             txtNoti.setVisibility(View.VISIBLE);
             txtNoti.setText("You are the volunteer of this site");
             layoutSatistic.setVisibility(View.VISIBLE);

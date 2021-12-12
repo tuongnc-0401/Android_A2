@@ -159,14 +159,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng latLng) {
-                if ( !username.isEmpty()){
-                    Intent intent = new Intent(MapsActivity.this, AddNewSite.class);
-                    intent.putExtra("latitude", latLng.latitude);
-                    intent.putExtra("longitude", latLng.longitude);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(MapsActivity.this, "You need to login to create a new site", Toast.LENGTH_SHORT).show();
+
+
+                if (!username.equals("admin")){
+                    if ( !username.isEmpty()){
+                        Intent intent = new Intent(MapsActivity.this, AddNewSite.class);
+                        intent.putExtra("latitude", latLng.latitude);
+                        intent.putExtra("longitude", latLng.longitude);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(MapsActivity.this, "You need to login to create a new site", Toast.LENGTH_SHORT).show();
+                    }
                 }
+
+
 
 
             }

@@ -23,6 +23,7 @@ public class ProfileActivity extends AppCompatActivity {
     DatabaseHelper databaseHelper;
     String username;
     ListView lvMember, lvMemberAdmin, lvLeader;
+    View divider;
 
 
     @Override
@@ -68,6 +69,7 @@ public class ProfileActivity extends AppCompatActivity {
         txtLeaderProfile = findViewById(R.id.txtLeaderProfile);
         txtMemberProfile = findViewById(R.id.txtMemberProfile);
         lvMemberAdmin = findViewById(R.id.lvMemberAdmin);
+        divider =findViewById(R.id.divider);
     }
 
     private void getData(){
@@ -91,6 +93,7 @@ public class ProfileActivity extends AppCompatActivity {
             lvLeader.setVisibility(View.INVISIBLE);
             txtLeaderProfile.setVisibility(View.INVISIBLE);
             lvMember.setVisibility(View.INVISIBLE);
+            divider.setVisibility(View.GONE);
 
             if(numOfSite == 0){
                 lvMemberAdmin.setVisibility(View.GONE);
