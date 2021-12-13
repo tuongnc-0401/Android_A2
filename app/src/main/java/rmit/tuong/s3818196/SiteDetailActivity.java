@@ -1,5 +1,6 @@
 package rmit.tuong.s3818196;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -18,6 +19,8 @@ public class SiteDetailActivity extends AppCompatActivity {
     private int userID, siteID;
     Button btnJoinSite, btnQuitSite, btnRegister, btnViewVolunteer, btnUpdateStatistic;
     ConstraintLayout layoutSatistic, layoutAdmin;
+    UserModel user;
+    SiteModel site;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,18 +33,9 @@ public class SiteDetailActivity extends AppCompatActivity {
         userID = intent.getIntExtra("userID", 0);
         siteID = intent.getIntExtra("siteID", 0);
 
-        UserModel user = databaseHelper.getUserByID(userID+"");
-        SiteModel site = databaseHelper.getSiteByID(siteID);
+        getData();
 
-        txtWelcome.setText("Welcome "+user.getUsername()+ " to "+site.getName());
-        txtSiteName.setText(""+site.getName());
-        txtSiteLeader.setText(site.getLeaderName());
-        // count of volunteer
-        int numOfVolunteer = databaseHelper.getNumOfVolunteer(siteID+"");
-        txtNumOfVolunteer.setText(numOfVolunteer+"");
-        txtNumOfPeople.setText(site.getNumOfPeopleTested()+"");
-        txtNumOfPositive.setText(site.getNumOfPositive()+"");
-        txtNumOfNegative.setText(site.getNumOfNegative()+"");
+
         int leaderID = site.getLeaderID();
 
 
@@ -174,6 +168,16 @@ public class SiteDetailActivity extends AppCompatActivity {
             }
         });
 
+
+        // BTN UPDATE STATISTIC
+        btnUpdateStatistic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i2 = new Intent(SiteDetailActivity.this, UpdateStatisticActivity.class);
+                i2.putExtra("siteID", siteID);
+                startActivityForResult(i2, 200);
+            }
+        });
     }
 
     private void initial() {
@@ -192,5 +196,29 @@ public class SiteDetailActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btnRegisterFriend);
         btnViewVolunteer = findViewById(R.id.btnViewVolunteer);
         btnUpdateStatistic = findViewById(R.id.btnUpdateStatistic);
+    }
+
+    private void getData(){
+         user = databaseHelper.getUserByID(userID+"");
+         site = databaseHelper.getSiteByID(siteID);
+        txtWelcome.setText("Welcome "+user.getUsername()+ " to "+site.getName());
+        txtSiteName.setText(""+site.getName());
+        txtSiteLeader.setText(site.getLeaderName());
+        // count of volunteer
+        int numOfVolunteer = databaseHelper.getNumOfVolunteer(siteID+"");
+        txtNumOfVolunteer.setText(numOfVolunteer+"");
+        txtNumOfPeople.setText(site.getNumOfPeopleTested()+"");
+        txtNumOfPositive.setText(site.getNumOfPositive()+"");
+        txtNumOfNegative.setText(site.getNumOfNegative()+"");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 200){
+            if(resultCode == RESULT_OK){
+                getData();
+            }
+        }
     }
 }

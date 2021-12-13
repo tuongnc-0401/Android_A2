@@ -12,6 +12,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
@@ -27,6 +28,11 @@ public class CustomClusterRenderer extends DefaultClusterRenderer<SiteModel> {
         markerOptions.icon(bitmapDescriptorFromVector(mContext,R.drawable.ic_site))
         .snippet(String.valueOf(item.getId()));
 
+    }
+
+    @Override
+    protected boolean shouldRenderAsCluster(@NonNull Cluster<SiteModel> cluster) {
+        return cluster.getSize() > 1;
     }
 
     public CustomClusterRenderer(Context context, GoogleMap map, ClusterManager<SiteModel> clusterManager) {

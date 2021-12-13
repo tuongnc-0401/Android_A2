@@ -9,13 +9,21 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,6 +50,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,9 +68,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ImageView ic_gps, ic_join;
     private Button btnLogin;
     private List<SiteModel> listSites;
-    private DatabaseHelper databaseHelper = new DatabaseHelper(MapsActivity.this);
+  //  private DatabaseHelper databaseHelper = new DatabaseHelper(MapsActivity.this);
+  private DatabaseHelper databaseHelper;
     private SharedPreferences sharedPreferences;
     private  String username;
+    private AutoCompleteTextView mSearchText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +84,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        databaseHelper = new DatabaseHelper(MapsActivity.this);
         ic_gps = findViewById(R.id.ic_gps);
         ic_join = findViewById(R.id.ic_login);
         btnLogin = findViewById(R.id.btnLogInMap);
@@ -132,6 +144,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             databaseHelper.createUser("admin", "admin","admin");
         }
 
+
+        searchFunction();
+    }
+
+    private void searchFunction() {
+        String[] site = new String[]{
+                "quochuy sdfs ", "hehe sfsdf ", "sdfdsf sdfdfsf","hellocacban sfd fs"
+        };
+
+
+        AutoCompleteTextView editText = findViewById(R.id.input_search);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,site);
+        editText.setAdapter(adapter);
     }
 
     /**
@@ -347,5 +372,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 //        }
     }
+
+
+
+
 
 }

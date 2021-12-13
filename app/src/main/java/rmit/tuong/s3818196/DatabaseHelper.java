@@ -321,7 +321,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return  returnedList;
     }
 
+        public void updateStatistic(int siteID, int numOfPositive, int numOfNegative){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        int total = numOfNegative+numOfPositive;
+        cv.put(COLUMN_SITE_NUM_PEOPLE_TESTED,total);
+        cv.put(COLUMN_SITE_NUM_OF_POSITIVE,numOfPositive);
+        cv.put(COLUMN_SITE_NUM_OF_NEGATIVE,numOfNegative);
+        db.update(SITE_TABLE, cv,COLUMN_SITE_ID+ " = " + siteID, null);
 
+         }
 
 
         public boolean deleteOneMembership (String userID, String siteID){

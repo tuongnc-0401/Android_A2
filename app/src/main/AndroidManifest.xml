@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.S3818196">
         <activity
+            android:name=".UpdateStatisticActivity"
+            android:exported="false" />
+        <activity
             android:name=".ListAllVolunteerActivity"
             android:exported="false" />
         <activity
