@@ -152,7 +152,7 @@ public class SiteModel implements ClusterItem {
 
     @Override
     public String toString() {
-        return "Site: "+name;
+        return name;
     }
 
     @NonNull

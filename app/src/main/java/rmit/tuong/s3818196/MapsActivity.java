@@ -18,6 +18,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -149,14 +150,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void searchFunction() {
-        String[] site = new String[]{
-                "quochuy sdfs ", "hehe sfsdf ", "sdfdsf sdfdfsf","hellocacban sfd fs"
-        };
+
+        List<SiteModel> siteSearch = databaseHelper.getAllSite();
+
+        List<String> site = new ArrayList<>();
+        for (SiteModel siteEach: siteSearch) {
+            site.add(siteEach.getName());
+        }
 
 
         AutoCompleteTextView editText = findViewById(R.id.input_search);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,site);
+        ArrayAdapter<SiteModel> adapter = new ArrayAdapter<SiteModel>(this, android.R.layout.simple_list_item_1,siteSearch);
         editText.setAdapter(adapter);
+        editText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                SiteModel clickedSite = (SiteModel) adapterView.getItemAtPosition(i);
+
+//                String name = adapterView.getItemAtPosition(i).toString();
+//                LatLng result = findLocation(name,siteSearch);
+//              //  mMap.moveCamera(CameraUpdateFactory.newLatLng(result));
+               mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(clickedSite.getLatitude(),clickedSite.getLongitude()),17f));
+
+            }
+        });
+    }
+
+    private LatLng findLocation(String name, List<SiteModel> siteSearch){
+        for (SiteModel siteEach: siteSearch) {
+            if(siteEach.getName().equals(name)){
+               LatLng tmp = new LatLng(siteEach.getLatitude(),siteEach.getLongitude());
+               return tmp;
+            }
+        }
+        return null;
     }
 
     /**
