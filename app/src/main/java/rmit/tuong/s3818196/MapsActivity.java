@@ -89,6 +89,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         ic_gps = findViewById(R.id.ic_gps);
         ic_join = findViewById(R.id.ic_login);
         btnLogin = findViewById(R.id.btnLogInMap);
+        mSearchText = findViewById(R.id.input_search);
         sharedPreferences = getSharedPreferences("userLogin", MODE_PRIVATE);
         username = sharedPreferences.getString("username", "");
         if ( !username.isEmpty()){
@@ -159,31 +160,68 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
 
-        AutoCompleteTextView editText = findViewById(R.id.input_search);
+       // AutoCompleteTextView editText = findViewById(R.id.input_search);
         ArrayAdapter<SiteModel> adapter = new ArrayAdapter<SiteModel>(this, android.R.layout.simple_list_item_1,siteSearch);
-        editText.setAdapter(adapter);
-        editText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mSearchText.setAdapter(adapter);
+        mSearchText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 SiteModel clickedSite = (SiteModel) adapterView.getItemAtPosition(i);
-
-//                String name = adapterView.getItemAtPosition(i).toString();
-//                LatLng result = findLocation(name,siteSearch);
-//              //  mMap.moveCamera(CameraUpdateFactory.newLatLng(result));
                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(clickedSite.getLatitude(),clickedSite.getLongitude()),17f));
 
             }
         });
+
+
+
+        mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
+                        || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER
+                ){
+                    geoLocate();
+                   // Toast.makeText(MapsActivity.this, mSearchText.getText().toString(), Toast.LENGTH_SHORT).show();
+                }
+                return false;
+            }
+        });
+
+
     }
 
-    private LatLng findLocation(String name, List<SiteModel> siteSearch){
-        for (SiteModel siteEach: siteSearch) {
-            if(siteEach.getName().equals(name)){
-               LatLng tmp = new LatLng(siteEach.getLatitude(),siteEach.getLongitude());
-               return tmp;
-            }
+
+//    private LatLng findLocation(String name, List<SiteModel> siteSearch){
+//        for (SiteModel siteEach: siteSearch) {
+//            if(siteEach.getName().equals(name)){
+//               LatLng tmp = new LatLng(siteEach.getLatitude(),siteEach.getLongitude());
+//               return tmp;
+//            }
+//        }
+//        return null;
+//    }
+
+
+    private void geoLocate(){
+        Log.d(TAG, "geoLocate: geoLocating");
+        String searchString = mSearchText.getText().toString();
+
+        Geocoder geocoder = new Geocoder(MapsActivity.this);
+        List<Address> list = new ArrayList<>();
+        try {
+            list = geocoder.getFromLocationName(searchString,1);
+        } catch (IOException e){
+            Log.e(TAG, "geoLocate: IOException"+ e.getMessage());
         }
-        return null;
+        if(list.size()>0){
+            Address address = list.get(0);
+            Log.d(TAG, "geoLocate: found a location" + address.toString());
+       //  Toast.makeText(this, address.getLatitude()+"", Toast.LENGTH_SHORT).show();
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(address.getLatitude(),address.getLongitude()),15));
+
+        }
     }
 
     /**
