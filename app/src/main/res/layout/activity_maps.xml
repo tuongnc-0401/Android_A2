@@ -4,14 +4,14 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 xmlns:tools="http://schemas.android.com/tools"
 tools:context=".MapsActivity">
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    />
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -65,17 +65,21 @@ tools:context=".MapsActivity">
         android:layout_marginRight="20dp"
         android:src="@drawable/ic_join"
         android:visibility="invisible"></ImageView>
+
     <Button
         android:id="@+id/btnLogInMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/relLayout1"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:layout_below="@+id/relLayout1"
-        android:text="LogIn" />
+        android:background="#9C27B0"
+        android:backgroundTint="#9C27B0"
+        android:text="LogIn"
+        android:textColor="#FFFFFF" />
 
 
 </RelativeLayout>

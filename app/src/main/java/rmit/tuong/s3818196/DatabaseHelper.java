@@ -186,6 +186,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public void updateNumVolunteer(String siteId, int numVolunteer){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_SITE_NUM_OF_VOLUNTEER,numVolunteer);
+        db.update(SITE_TABLE, cv,COLUMN_SITE_ID+ " = " + siteId, null);
+    }
+
     /**
      * MEMBERSHIP TABLE
      */
@@ -418,5 +425,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         else
             return false;
     }
+
+
+
 
 }

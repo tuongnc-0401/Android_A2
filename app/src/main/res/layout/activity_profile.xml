@@ -18,19 +18,22 @@
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp"
+
+        />
 
     <ListView
         android:id="@+id/lvMemberAdmin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
         android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="15dp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtMemberProfile" />
+        app:layout_constraintTop_toBottomOf="@+id/txtMemberProfile"
+        android:background="@drawable/bk_rec"/>
 
     <ListView
         android:id="@+id/lvMember"
@@ -42,20 +45,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtMemberProfile"
-        tools:ignore="DuplicateSpeakableTextCheck" />
+        tools:ignore="DuplicateSpeakableTextCheck"
+        android:background="@drawable/bk_rec"/>
 
 
-    <View
-        android:id="@+id/divider"
-        android:layout_width="300dp"
-        android:layout_height="2dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="10dp"
-        android:background="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/txtLeaderProfile"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+
 
 
     <TextView
@@ -79,7 +73,8 @@
         android:layout_marginEnd="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtLeaderProfile" />
+        app:layout_constraintTop_toBottomOf="@+id/txtLeaderProfile"
+        android:background="@drawable/bk_rec"/>
 
     <RelativeLayout
         android:id="@+id/relativeLayout"

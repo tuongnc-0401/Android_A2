@@ -2,6 +2,10 @@ package rmit.tuong.s3818196;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +16,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -29,6 +34,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -48,11 +54,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.maps.DirectionsApiRequest;
+import com.google.maps.GeoApiContext;
+import com.google.maps.PendingResult;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.model.DirectionsResult;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import rmit.tuong.s3818196.databinding.ActivityMapsBinding;
@@ -74,6 +85,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private SharedPreferences sharedPreferences;
     private  String username;
     private AutoCompleteTextView mSearchText;
+
+    private GeoApiContext mGeoApiContext = null;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,6 +163,46 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         searchFunction();
+
+
+        checkChanges();
+    }
+
+    private void checkChanges() {
+
+        int userId = sharedPreferences.getInt("userID", -100);
+        String userID = userId+"";
+        if(!userID.equals("")){
+
+            List<SiteModel> siteList = databaseHelper.getAllSiteOfLeader(userID);
+            if(siteList.size() > 0){
+
+                for (SiteModel site: siteList) {
+                    String siteID = site.getId()+"";
+                   int previousNum = site.getNumOfVolunteer();
+                   List<UserModel> userVolunteer = databaseHelper.getAllVolunteerOfOneSite(siteID);
+                    int latterNum = userVolunteer.size();
+
+
+                    if(previousNum < latterNum){
+                         int diff = latterNum - previousNum;
+                          createNotification("There are new "+ diff+" users join site "+site.getName(), siteID,MapsActivity.this, Integer.parseInt(siteID));
+                          databaseHelper.updateNumVolunteer(siteID,latterNum);
+                    } else if (previousNum > latterNum) {
+                        int diff = previousNum - latterNum;
+                        createNotification("There are "+ diff+" users leave site "+site.getName(), siteID,MapsActivity.this, Integer.parseInt(siteID));
+                        databaseHelper.updateNumVolunteer(siteID,latterNum);
+                    }
+                }
+
+            }
+
+//            String a = "1, 2, 3, 4,";
+//            List<String> s = Arrays.asList(a.split(","));
+
+        //    createNotification("Hello", 1,MapsActivity.this,1);
+        }
+
     }
 
     private void searchFunction() {
@@ -405,6 +460,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
+//        clusterManager.setOnClusterItemInfoWindowClickListener(new ClusterManager.OnClusterItemInfoWindowClickListener<SiteModel>() {
+//            @Override
+//            public void onClusterItemInfoWindowClick(SiteModel item) {
+//          //      Toast.makeText(MapsActivity.this, item.getLatitude()+"", Toast.LENGTH_SHORT).show();
+//                calculateDirections(item.getLatitude(),item.getLongitude());
+//            }
+//        });
+
 
         clusterManager.getMarkerCollection()
                 .setInfoWindowAdapter(new CustomInfoViewAdapter(LayoutInflater.from(this), MapsActivity.this));
@@ -438,7 +501,104 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //        }
     }
 
+    private void calculateDirections(double latitudeSite, double longitudeSite){
+        Log.d(TAG, "calculateDirections: calculating directions.");
 
+        LatLng mUserPosition = new LatLng(10.73, 106.69);
+
+        com.google.maps.model.LatLng destination = new com.google.maps.model.LatLng(
+                latitudeSite,
+                longitudeSite
+        );
+        DirectionsApiRequest directions = new DirectionsApiRequest(mGeoApiContext);
+
+        directions.alternatives(true);
+        directions.origin(
+                new com.google.maps.model.LatLng(
+                        mUserPosition.latitude,
+                        mUserPosition.longitude
+                )
+        );
+        Log.d(TAG, "calculateDirections: destination: " + destination.toString());
+        directions.destination(destination).setCallback(new PendingResult.Callback<DirectionsResult>() {
+            @Override
+            public void onResult(DirectionsResult result) {
+                Log.d(TAG, "calculateDirections: routes: " + result.routes[0].toString());
+                Log.d(TAG, "calculateDirections: duration: " + result.routes[0].legs[0].duration);
+                Log.d(TAG, "calculateDirections: distance: " + result.routes[0].legs[0].distance);
+                Log.d(TAG, "calculateDirections: geocodedWayPoints: " + result.geocodedWaypoints[0].toString());
+            }
+
+            @Override
+            public void onFailure(Throwable e) {
+                Log.e(TAG, "calculateDirections: Failed to get directions: " + e.getMessage() );
+
+            }
+        });
+    }
+
+    private NotificationManager notifManager;
+    public void createNotification(String aMessage, String siteID, Context context, int idOfNotif) {
+        final int NOTIFY_ID = idOfNotif; // ID of notification
+        int userIDExtra = sharedPreferences.getInt("userID", -100);
+        String id = context.getString(R.string.app_name); // default_channel_id
+        String title = context.getString(R.string.app_name); // Default Channel
+        Intent intent;
+        PendingIntent pendingIntent;
+        NotificationCompat.Builder builder;
+        if (notifManager == null) {
+            notifManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel mChannel = notifManager.getNotificationChannel(id);
+            if (mChannel == null) {
+                mChannel = new NotificationChannel(id, title, importance);
+                mChannel.enableVibration(true);
+                mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+                notifManager.createNotificationChannel(mChannel);
+            }
+            builder = new NotificationCompat.Builder(context, id);
+            intent = new Intent(context, SiteDetailActivity.class);
+            intent.putExtra("siteID", Integer.parseInt(siteID) );
+            intent.putExtra("userID", userIDExtra);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            builder.setContentTitle("Changes in your site ")                            // required
+                    .setSmallIcon(android.R.drawable.ic_popup_reminder)   // required
+                     // required
+                    .setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText(aMessage))
+                    .setContentText(aMessage)
+                    .setDefaults(Notification.DEFAULT_ALL)
+                    .setAutoCancel(true)
+                    .setContentIntent(pendingIntent)
+                    .setTicker(aMessage)
+                    .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+        }
+        else {
+            builder = new NotificationCompat.Builder(context, id);
+            intent = new Intent(context, SiteDetailActivity.class);
+            intent.putExtra("siteID", Integer.parseInt(siteID));
+            intent.putExtra("userID", userIDExtra);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            builder.setContentTitle("Changes in your site ")                            // required
+                    .setSmallIcon(android.R.drawable.ic_popup_reminder)   // required
+                    // required
+                    .setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText(aMessage))
+                    .setContentText(aMessage) // required
+                    .setDefaults(Notification.DEFAULT_ALL)
+                    .setAutoCancel(true)
+                    .setContentIntent(pendingIntent)
+                    .setTicker(aMessage)
+                    .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400})
+                    .setPriority(Notification.PRIORITY_HIGH);
+        }
+        Notification notification = builder.build();
+        notifManager.notify(NOTIFY_ID, notification);
+    }
 
 
 

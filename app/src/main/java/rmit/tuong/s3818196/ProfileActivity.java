@@ -23,7 +23,7 @@ public class ProfileActivity extends AppCompatActivity {
     DatabaseHelper databaseHelper;
     String username;
     ListView lvMember, lvMemberAdmin, lvLeader;
-    View divider;
+
 
 
     @Override
@@ -69,7 +69,7 @@ public class ProfileActivity extends AppCompatActivity {
         txtLeaderProfile = findViewById(R.id.txtLeaderProfile);
         txtMemberProfile = findViewById(R.id.txtMemberProfile);
         lvMemberAdmin = findViewById(R.id.lvMemberAdmin);
-        divider =findViewById(R.id.divider);
+
     }
 
     private void getData(){
@@ -93,13 +93,14 @@ public class ProfileActivity extends AppCompatActivity {
             lvLeader.setVisibility(View.INVISIBLE);
             txtLeaderProfile.setVisibility(View.INVISIBLE);
             lvMember.setVisibility(View.INVISIBLE);
-            divider.setVisibility(View.GONE);
+
 
             if(numOfSite == 0){
                 lvMemberAdmin.setVisibility(View.GONE);
             }
 
             if(listSiteModel.size() >0){
+                lvMemberAdmin.setVisibility(View.VISIBLE);
                 ArrayAdapter  adapter = new ArrayAdapter<SiteModel>(this, android.R.layout.simple_list_item_1,listSiteModel);
                 lvMemberAdmin.setAdapter(adapter);
                 lvMemberAdmin.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -114,6 +115,8 @@ public class ProfileActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
+            } else {
+                lvMemberAdmin.setVisibility(View.GONE);
             }
 
 
@@ -133,6 +136,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
 
             if(listSiteModel.size() >0){
+                lvMember.setVisibility(View.VISIBLE);
                 ArrayAdapter  adapter = new ArrayAdapter<SiteModel>(this, android.R.layout.simple_list_item_1,listSiteModel);
                 lvMember.setAdapter(adapter);
                 lvMember.setOnItemClickListener(new AdapterView.OnItemClickListener() {
